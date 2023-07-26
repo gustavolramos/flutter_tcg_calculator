@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "731114649187",
+    "project_id": "tcg-calculator",
+    "storage_bucket": "tcg-calculator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:731114649187:android:b329b058075eb21b93aa56",
+        "android_client_info": {
+          "package_name": "com.example.flutter_tcg_calculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "731114649187-080snjc3111nk61ph94a7h3q78fkrkk2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABKQPmF411jAhrwlsahWiORePvPZe2Tk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "731114649187-080snjc3111nk61ph94a7h3q78fkrkk2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
