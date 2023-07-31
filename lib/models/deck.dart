@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'card.dart';
 
@@ -6,12 +5,12 @@ class Deck {
   Deck({required this.name, required this.cardList});
 
   late String name;
-  late List<Card> cardList = [];
+  late List<CustomCard> cardList;
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'cards': cardList.map((card) => card.toMap()).toList(),
+      'cardList': cardList.map((card) => card.toMap()).toList(),
     };
   }
 
@@ -19,7 +18,8 @@ class Deck {
     return Deck(
       name: snapshot['name'],
       cardList: (snapshot['cardList'])
-          .map((cardSnapshot) => Card.fromSnapshot(cardSnapshot as Map<String, dynamic>))
+          .map((cardSnapshot) =>
+              CustomCard.fromSnapshot(cardSnapshot as Map<String, dynamic>))
           .toList(),
     );
   }
@@ -77,47 +77,29 @@ class Deck {
     }
   }
 
-  List<Card> drawCards(int numberOfCardsToDraw) {
-    
-    if (numberOfCardsToDraw <= 0) {
-      // ignore: avoid_print
-      print('You cant draw zero or less cards');
-      return []; 
-    }
+  // "choose" and "hypergeometricProbability" calculate the % of opening x copies (exactly) of a given card
+  // To know the % of drawing "at least x copies" repeat the function with different "numToCheck" up to the number of copies played
 
-    List<Card> drawnCards = [];
-    List<Card> availableCards = List.from(cardList);
-    availableCards.shuffle();
-
-    for (Card card in availableCards) {
-      int availableQuantity = card.quantity - drawnCards.where((c) => c.name == card.name).length;
-      int cardsToDraw = min(numberOfCardsToDraw, availableQuantity);
-      for (int i = 0; i < cardsToDraw; i++) {
-        drawnCards.add(
-          Card(
-          name: card.name,
-          type: card.type,
-          attribute: card.attribute,
-          tag: card.tag,
-          quantity: 1,
-        ));
-        numberOfCardsToDraw--;
-      }
-      if (numberOfCardsToDraw == 0) break;
+  double choose(int n, int k) {
+    if (k == 0 || k == n) {
+      return 1;
     }
-    return drawnCards;
+    double result = 1;
+    for (int i = 1; i <= k; i++) {
+      result = result * (n - k + i) / i;
+    }
+    return result;
   }
 
-  void calculateChancesPerTag(Deck deck, String tag, int cardsDrawn) {
-// Receives a deck, a tag and a number of cards drawn from the deck
-// Returns a % of chance of seeing at least one copy of a card that has the given tag
-// Number of card drawn cannot be zero or less
-// If no card is found it prints this information.
-  }
-
-  void calculateChancesPerName(Deck deck, String name) {
-// Receives a deck, a tag and a number of cards drawn from the deck
-// Returns a % of chance of seeing at least one copy of a card that has the given name
-// Number of card drawn cannot be zero or less
+  double hypergeometricProbability(int numOfGivenCard, int totalCardsInDeck,
+      int numberOfCardsInOpeningHand, int numToCheck) {
+    double numerator = 0;
+    for (int i = numToCheck; i <= numberOfCardsInOpeningHand; i++) {
+      numerator += choose(numOfGivenCard, i) *
+          choose(totalCardsInDeck - numOfGivenCard,
+              numberOfCardsInOpeningHand - i);
+    }
+    double denominator = choose(totalCardsInDeck, numberOfCardsInOpeningHand);
+    return (numerator / denominator) * 100;
   }
 }

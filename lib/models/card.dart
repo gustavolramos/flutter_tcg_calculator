@@ -1,7 +1,12 @@
 import '../utils/enums.dart';
 
-class Card {
-  Card({required name, required type, required attribute, required quantity, required tag});
+class CustomCard {
+  CustomCard(
+      {required this.name,
+      required this.type,
+      required this.attribute,
+      required this.quantity,
+      required this.tag});
 
   late String name;
   late CardType type;
@@ -19,8 +24,8 @@ class Card {
     };
   }
 
-  factory Card.fromSnapshot(Map<String, dynamic> cardSnapshot) {
-    return Card(
+  factory CustomCard.fromSnapshot(Map<String, dynamic> cardSnapshot) {
+    return CustomCard(
       name: cardSnapshot['name'],
       type: _cardTypeFromString(cardSnapshot['type']),
       attribute: _attributeFromString(cardSnapshot['attribute']),
