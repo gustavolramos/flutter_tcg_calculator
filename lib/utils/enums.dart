@@ -1,4 +1,4 @@
-// Enums for multiple purposes
+// enums for multiple purposes
 
 enum Attribute {
   light,

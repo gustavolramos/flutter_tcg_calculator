@@ -7,26 +7,24 @@ class Deck {
   late String name;
   late List<CustomCard> cardList;
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'name': name,
       'cardList': cardList.map((card) => card.toMap()).toList(),
     };
   }
 
-  factory Deck.fromSnapshot(DocumentSnapshot snapshot) {
-    return Deck(
-      name: snapshot['name'],
-      cardList: (snapshot['cardList'])
-          .map((cardSnapshot) =>
-              CustomCard.fromSnapshot(cardSnapshot as Map<String, dynamic>))
-          .toList(),
-    );
-  }
+  Deck.fromJson(Map<String, dynamic> json)
+      : this(
+          name: json['name'] as String,
+          cardList: (json['cardList'])
+              .map((cardSnapshot) => CustomCard.fromJson(cardSnapshot as Map<String, dynamic>))
+              .toList(),
+        );
 
   Future<void> addDeck(Deck deck) async {
     try {
-      await FirebaseFirestore.instance.collection('Decks').add(deck.toMap());
+      await FirebaseFirestore.instance.collection('Decks').add(deck.toJson());
     } catch (e) {
       // ignore: avoid_print
       print('Error adding deck: $e');
@@ -40,7 +38,7 @@ class Deck {
           .doc(deckId)
           .get();
       if (doc.exists) {
-        return Deck.fromSnapshot(doc);
+        return Deck.fromJson(doc as Map<String, dynamic>);
       } else {
         // ignore: avoid_print
         print('Deck not found!');
@@ -55,7 +53,7 @@ class Deck {
 
   Future<void> editDeck(String deckId, Deck updatedDeck) async {
     try {
-      Map<String, dynamic> deckMap = updatedDeck.toMap();
+      Map<String, dynamic> deckMap = updatedDeck.toJson();
       await FirebaseFirestore.instance
           .collection('Decks')
           .doc(deckId)

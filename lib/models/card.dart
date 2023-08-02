@@ -24,15 +24,14 @@ class CustomCard {
     };
   }
 
-  factory CustomCard.fromSnapshot(Map<String, dynamic> cardSnapshot) {
-    return CustomCard(
-      name: cardSnapshot['name'],
-      type: _cardTypeFromString(cardSnapshot['type']),
-      attribute: _attributeFromString(cardSnapshot['attribute']),
-      tag: _tagFromString(cardSnapshot['tag']),
-      quantity: cardSnapshot['quantity'],
-    );
-  }
+  CustomCard.fromJson(Map<String, dynamic> json)
+      : this(
+          name: json['name'],
+          type: _cardTypeFromString(json['type']),
+          attribute: _attributeFromString(json['attribute']),
+          tag: _tagFromString(json['tag']),
+          quantity: json['quantity'],
+        );
 
   static CardType _cardTypeFromString(String type) =>
       CardType.values.firstWhere((e) => e.toString() == type);
