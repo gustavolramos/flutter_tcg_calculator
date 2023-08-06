@@ -1,13 +1,16 @@
 import '../utils/enums.dart';
 
-class CustomCard {
-  CustomCard(
-      {required this.name,
+class CardModel {
+  CardModel(
+      {
+      this.id,
+      required this.name,
       required this.type,
       required this.attribute,
       required this.quantity,
       required this.tag});
 
+  String? id;
   late String name;
   late CardType type;
   late Attribute attribute;
@@ -16,6 +19,7 @@ class CustomCard {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'type': type.toString(),
       'attribute': attribute.toString(),
@@ -24,13 +28,14 @@ class CustomCard {
     };
   }
 
-  CustomCard.fromJson(Map<String, dynamic> json)
+  CardModel.fromJson(Map<String, dynamic> json)
       : this(
-          name: json['name'],
-          type: _cardTypeFromString(json['type']),
-          attribute: _attributeFromString(json['attribute']),
-          tag: _tagFromString(json['tag']),
-          quantity: json['quantity'],
+          id: json['id'],
+          name: json['name']!,
+          type: _cardTypeFromString(json['type']!),
+          attribute: _attributeFromString(json['attribute']!),
+          tag: _tagFromString(json['tag']!),
+          quantity: json['quantity']!,
         );
 
   static CardType _cardTypeFromString(String type) =>

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   const CustomAppBar({
@@ -14,7 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   @override
   Widget build(BuildContext context) {
         return AppBar(
-      leading: const Icon(Icons.card_travel),
+      leading: IconButton(onPressed: () => context.go('/'), icon: const Icon(Icons.list)),
       title: Title(color: Colors.white, child: const Text('TCG Calculator')),
       backgroundColor: Colors.deepPurple,
       centerTitle: true,
