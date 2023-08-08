@@ -1,3 +1,4 @@
+import '../models/card_model.dart';
 import '../models/deck_model.dart';
 import '../services/deck_services.dart';
 
@@ -18,6 +19,31 @@ class CustomDeckController {
 
   Future<void> deleteDeck(String deckId) async {
     await _deckService.deleteDeck(deckId);
+  }
+
+  Future<void> addListOfCardsToDeck(
+      String deckId, List<CardModel> cards) async {
+    await _deckService.addListOfCardsToDeck(deckId, cards);
+  }
+
+  Future<void> addCardToDeck(String deckId, CardModel card) async {
+    await _deckService.addCardToDeck(deckId, card);
+  }
+
+  Future<List<CardModel>> getCardListInDeck(String deckId) async {
+    return await _deckService.getCardListInDeck(deckId);
+  }
+
+  Future<CardModel?> getCardInDeck(String deckId, String cardId) async {
+    return await _deckService.getSingleCardInDeck(deckId, cardId);
+  }
+
+  Future<void> editCardInDeck(String deckId, CardModel updatedCard) async {
+    await _deckService.editCardInDeck(deckId, updatedCard);
+  }
+
+  Future<void> deleteCardFromDeck(String deckId, String cardId) async {
+    await _deckService.deleteCardFromDeck(deckId, cardId);
   }
 
   double choose(int n, int k) {

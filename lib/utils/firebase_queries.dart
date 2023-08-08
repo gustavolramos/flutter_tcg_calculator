@@ -8,5 +8,3 @@ final Query<DeckModel> decksQuery = FirebaseFirestore.instance
       fromFirestore: (snapshot, _) => DeckModel.fromJson(snapshot.data()!),
       toFirestore: (deck, _) => deck.toJson(),
     );
-
-    
