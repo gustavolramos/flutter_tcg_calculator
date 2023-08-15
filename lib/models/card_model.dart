@@ -1,14 +1,14 @@
 import '../utils/enums.dart';
 
 class CardModel {
-  CardModel(
-      {
-      this.id,
-      required this.name,
-      required this.type,
-      required this.attribute,
-      required this.quantity,
-      required this.tag});
+  CardModel({
+    this.id,
+    required this.name,
+    required this.type,
+    required this.attribute,
+    required this.quantity,
+    required this.tag,
+  });
 
   String? id;
   late String name;

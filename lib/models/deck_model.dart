@@ -1,7 +1,11 @@
 import 'card_model.dart';
 
 class DeckModel {
-  DeckModel({this.id, required this.name, required this.cardList});
+  DeckModel({
+    this.id,
+    required this.name,
+    required this.cardList,
+  });
 
   String? id;
   late String name;

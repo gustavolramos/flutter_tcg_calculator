@@ -30,7 +30,7 @@ class CustomDeckController {
     await _deckService.addCardToDeck(deckId, card);
   }
 
-  Future<List<CardModel>> getCardListInDeck(String deckId) async {
+  Future<List<CardModel>> getCardListInDeck(String? deckId) async {
     return await _deckService.getCardListInDeck(deckId);
   }
 

@@ -22,8 +22,8 @@ final routeProvider = Provider<GoRouter>((ref) => GoRouter(
             GoRoute(
                 path: ':deckId',
                 pageBuilder: (context, state) {
-                  final deckId = state.pathParameters['deckId'];
-                  return MaterialPage(child: DeckDetailsPage(docId: deckId));
+                  final String? deckId = state.pathParameters['deckId'];
+                  return MaterialPage(child: DeckDetailsPage(deckId: deckId));
                 }),
           ]),
     ]));

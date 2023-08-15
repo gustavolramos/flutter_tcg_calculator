@@ -96,19 +96,16 @@ class CustomDeckService {
     }
   }
 
-  Future<List<CardModel>> getCardListInDeck(String deckId) async {
+  Future<List<CardModel>> getCardListInDeck(String? deckId) async {
     try {
-      final deckRef =
-          FirebaseFirestore.instance.collection('decks').doc(deckId);
-
+      final deckRef = FirebaseFirestore.instance.collection('decks').doc(deckId);
       final doc = await deckRef.get();
       if (doc.exists) {
         final deckData = doc.data() as Map<String, dynamic>;
         if (deckData.containsKey('cardList')) {
           final List<dynamic> cardListData = deckData['cardList'];
           final List<CardModel> cardList = cardListData
-              .map((cardData) =>
-                  CardModel.fromJson(cardData as Map<String, dynamic>))
+              .map((cardData) => CardModel.fromJson(cardData as Map<String, dynamic>))
               .toList();
           return cardList;
         }
@@ -121,14 +118,10 @@ class CustomDeckService {
 
   Future<CardModel?> getSingleCardInDeck(String deckId, String cardId) async {
     try {
-      final deckRef =
-          FirebaseFirestore.instance.collection('decks').doc(deckId);
-
+      final deckRef = FirebaseFirestore.instance.collection('decks').doc(deckId);
       final doc = await deckRef.get();
       if (doc.exists) {
         final deckData = doc.data() as Map<String, dynamic>;
-
-        // If the 'cardList' field exists, find the card with the specified ID
         if (deckData.containsKey('cardList')) {
           final List<dynamic> cardListData = deckData['cardList'];
           final cardData = cardListData.firstWhere(
@@ -147,14 +140,10 @@ class CustomDeckService {
 
   Future<void> editCardInDeck(String deckId, CardModel updatedCard) async {
     try {
-      final deckRef =
-          FirebaseFirestore.instance.collection('decks').doc(deckId);
-
+      final deckRef = FirebaseFirestore.instance.collection('decks').doc(deckId);
       final doc = await deckRef.get();
       if (doc.exists) {
         final deckData = doc.data() as Map<String, dynamic>;
-
-        // If the 'cardList' field exists, find and update the card with the specified ID
         if (deckData.containsKey('cardList')) {
           final List<dynamic> cardListData = deckData['cardList'];
           final int index = cardListData
