@@ -5,9 +5,10 @@ import 'package:flutter_tcg_calculator/view/pages/error_page.dart';
 import 'package:flutter_tcg_calculator/view/pages/home_page.dart';
 import 'package:flutter_tcg_calculator/view/pages/list_of_decks.dart';
 import 'package:go_router/go_router.dart';
+import 'deck_providers.dart';
 
 final routeProvider = Provider<GoRouter>((ref) => GoRouter(
-  errorBuilder: (context, state) => const ErrorPage(),
+  errorBuilder: (context, state) => const CustomErrorPage(),
   routes: <RouteBase>[
       GoRoute(
         path: '/',
@@ -16,7 +17,8 @@ final routeProvider = Provider<GoRouter>((ref) => GoRouter(
       GoRoute(
           path: '/decklist',
           pageBuilder: (context, state) {
-            return const MaterialPage(child: CustomListView());
+            final customDeckController = ref.read(deckControllerProvider);
+            return MaterialPage(child: CustomListView(decksQuery: customDeckController.decksQuery,));
           },
           routes: [
             GoRoute(

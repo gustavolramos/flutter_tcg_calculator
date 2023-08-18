@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tcg_calculator/view/widgets/app_bar.dart';
 import 'package:go_router/go_router.dart';
 
-class ErrorPage extends StatelessWidget {
-  const ErrorPage({super.key});
+class CustomErrorPage extends StatelessWidget {
+  const CustomErrorPage({super.key});
 
   @override
   Widget build(BuildContext context) {

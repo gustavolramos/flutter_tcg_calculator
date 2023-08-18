@@ -4,11 +4,21 @@ import '../models/card_model.dart';
 import '../models/deck_model.dart';
 
 class CustomDeckService {
-  Future<void> addDeck(DeckModel deck) async {
+  final Query<DeckModel> decksQuery = FirebaseFirestore.instance
+      .collection('decks')
+      .orderBy('name')
+      .withConverter(
+        fromFirestore: (snapshot, _) => DeckModel.fromJson(snapshot.data()!),
+        toFirestore: (deck, _) => deck.toJson(),
+      );
+
+  Future<List<DeckModel>> getAllDecks() async {
     try {
-      await FirebaseFirestore.instance.collection('decks').add(deck.toJson());
+      final querySnapshot = await decksQuery.get();
+      return querySnapshot.docs.map((doc) => doc.data()).toList();
     } catch (e) {
-      print('Error adding deck: $e');
+      print('Error getting all decks: $e');
+      return [];
     }
   }
 
@@ -21,7 +31,7 @@ class CustomDeckService {
       if (doc.exists) {
         return DeckModel.fromJson(doc as Map<String, dynamic>);
       } else {
-        print('DeckModel not found!');
+        print('Deck not found!');
         return null;
       }
     } catch (e) {
@@ -30,14 +40,22 @@ class CustomDeckService {
     }
   }
 
+  Future<void> addDeck(DeckModel deck) async {
+    try {
+      await FirebaseFirestore.instance.collection('decks').add(deck.toJson());
+    } catch (e) {
+      print('Error adding deck: $e');
+    }
+  }
+
   Future<void> editDeck(String deckId, DeckModel updatedDeck) async {
     try {
       Map<String, dynamic> deckMap = updatedDeck.toJson();
       await FirebaseFirestore.instance
-          .collection('Decks')
+          .collection('decks')
           .doc(deckId)
           .update(deckMap);
-      print('DeckModel edited successfully! Here is the $deckMap');
+      print('Deck edited successfully! Here is the edtied $deckMap');
     } catch (e) {
       print('Error editing deck: $e');
     }
@@ -45,10 +63,55 @@ class CustomDeckService {
 
   Future<void> deleteDeck(String deckId) async {
     try {
-      await FirebaseFirestore.instance.collection('Decks').doc(deckId).delete();
+      await FirebaseFirestore.instance.collection('decks').doc(deckId).delete();
     } catch (e) {
-      print('DeckModel could not be deleted, the found error is $e');
+      print('Deck could not be deleted, the found error is $e');
     }
+  }
+
+  Future<List<CardModel>> getCardListInDeck(String? deckId) async {
+    try {
+      final deckRef =
+          FirebaseFirestore.instance.collection('decks').doc(deckId);
+      final doc = await deckRef.get();
+      if (doc.exists) {
+        final deckData = doc.data() as Map<String, dynamic>;
+        if (deckData.containsKey('cardList')) {
+          final List<dynamic> cardListData = deckData['cardList'];
+          final List<CardModel> cardList = cardListData
+              .map((cardData) =>
+                  CardModel.fromJson(cardData as Map<String, dynamic>))
+              .toList();
+          return cardList;
+        }
+      }
+    } catch (e) {
+      print('Error getting list of cards from deck: $e');
+    }
+    return [];
+  }
+
+  Future<CardModel?> getSingleCardInDeck(String deckId, String cardId) async {
+    try {
+      final deckRef =
+          FirebaseFirestore.instance.collection('decks').doc(deckId);
+      final doc = await deckRef.get();
+      if (doc.exists) {
+        final deckData = doc.data() as Map<String, dynamic>;
+        if (deckData.containsKey('cardList')) {
+          final List<dynamic> cardListData = deckData['cardList'];
+          final cardData = cardListData.firstWhere(
+              (cardData) => cardData['id'] == cardId,
+              orElse: () => null);
+          if (cardData != null) {
+            return CardModel.fromJson(cardData as Map<String, dynamic>);
+          }
+        }
+      }
+    } catch (e) {
+      print('Error getting card from deck: $e');
+    }
+    return null;
   }
 
   Future<void> addListOfCardsToDeck(
@@ -82,13 +145,9 @@ class CustomDeckService {
       final doc = await deckRef.get();
       if (doc.exists) {
         final deckData = doc.data() as Map<String, dynamic>;
-        if (deckData.containsKey('cardList')) {
-          final List<dynamic> existingCards = deckData['cardList'];
-          existingCards.add(card.toMap());
-          deckData['cardList'] = existingCards;
-        } else {
-          deckData['cardList'] = [card.toMap()];
-        }
+        final List<dynamic> cardListData = deckData['cardList'] ?? [];
+        cardListData.add(card.toMap());
+        deckData['cardList'] = cardListData;
         await deckRef.update(deckData);
       }
     } catch (e) {
@@ -96,66 +155,21 @@ class CustomDeckService {
     }
   }
 
-  Future<List<CardModel>> getCardListInDeck(String? deckId) async {
-    try {
-      final deckRef = FirebaseFirestore.instance.collection('decks').doc(deckId);
-      final doc = await deckRef.get();
-      if (doc.exists) {
-        final deckData = doc.data() as Map<String, dynamic>;
-        if (deckData.containsKey('cardList')) {
-          final List<dynamic> cardListData = deckData['cardList'];
-          final List<CardModel> cardList = cardListData
-              .map((cardData) => CardModel.fromJson(cardData as Map<String, dynamic>))
-              .toList();
-          return cardList;
-        }
-      }
-    } catch (e) {
-      print('Error getting list of cards from deck: $e');
-    }
-    return [];
-  }
-
-  Future<CardModel?> getSingleCardInDeck(String deckId, String cardId) async {
-    try {
-      final deckRef = FirebaseFirestore.instance.collection('decks').doc(deckId);
-      final doc = await deckRef.get();
-      if (doc.exists) {
-        final deckData = doc.data() as Map<String, dynamic>;
-        if (deckData.containsKey('cardList')) {
-          final List<dynamic> cardListData = deckData['cardList'];
-          final cardData = cardListData.firstWhere(
-              (cardData) => cardData['id'] == cardId,
-              orElse: () => null);
-          if (cardData != null) {
-            return CardModel.fromJson(cardData as Map<String, dynamic>);
-          }
-        }
-      }
-    } catch (e) {
-      print('Error getting card from deck: $e');
-    }
-    return null;
-  }
-
   Future<void> editCardInDeck(String deckId, CardModel updatedCard) async {
     try {
-      final deckRef = FirebaseFirestore.instance.collection('decks').doc(deckId);
+      final deckRef =
+          FirebaseFirestore.instance.collection('decks').doc(deckId);
       final doc = await deckRef.get();
       if (doc.exists) {
         final deckData = doc.data() as Map<String, dynamic>;
-        if (deckData.containsKey('cardList')) {
-          final List<dynamic> cardListData = deckData['cardList'];
-          final int index = cardListData
-              .indexWhere((cardData) => cardData['id'] == updatedCard.id);
-          if (index != -1) {
-            cardListData[index] = updatedCard.toMap();
-            deckData['cardList'] = cardListData;
-          }
+        final List<dynamic> cardListData = deckData['cardList'] ?? [];
+        final int index = cardListData
+            .indexWhere((cardData) => cardData['id'] == updatedCard.id);
+        if (index != -1) {
+          cardListData[index] = updatedCard.toMap();
+          deckData['cardList'] = cardListData;
+          await deckRef.update(deckData);
         }
-
-        // Update the deck with the modified card list
-        await deckRef.update(deckData);
       }
     } catch (e) {
       print('Error editing card in deck: $e');
@@ -164,17 +178,15 @@ class CustomDeckService {
 
   Future<void> deleteCardFromDeck(String deckId, String cardId) async {
     try {
-      final deckRef = FirebaseFirestore.instance.collection('decks').doc(deckId);
+      final deckRef =
+          FirebaseFirestore.instance.collection('decks').doc(deckId);
       final doc = await deckRef.get();
       if (doc.exists) {
         final deckData = doc.data() as Map<String, dynamic>;
-        if (deckData.containsKey('cardList')) {
-          final List<dynamic> cardListData = deckData['cardList'];
-          final updatedCardListData = cardListData
-              .where((cardData) => cardData['id'] != cardId)
-              .toList();
-          deckData['cardList'] = updatedCardListData;
-        }
+        final List<dynamic> cardListData = deckData['cardList'] ?? [];
+        final updatedCardListData =
+            cardListData.where((cardData) => cardData['id'] != cardId).toList();
+        deckData['cardList'] = updatedCardListData;
         await deckRef.update(deckData);
       }
     } catch (e) {

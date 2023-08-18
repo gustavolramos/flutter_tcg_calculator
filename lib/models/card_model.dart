@@ -15,7 +15,7 @@ class CardModel {
   late CardType type;
   late Attribute attribute;
   late Tag tag;
-  late int quantity;
+  late num quantity;
 
   Map<String, dynamic> toMap() {
     return {
@@ -38,12 +38,27 @@ class CardModel {
           quantity: json['quantity']!,
         );
 
-  static CardType _cardTypeFromString(String type) =>
-      CardType.values.firstWhere((e) => e.toString() == type);
+  static CardType _cardTypeFromString(String type) {
+    try {
+      return CardType.values.firstWhere((e) => e.toString() == type);
+    } catch (e) {
+      throw FormatException('Invalid card type: $type');
+    }
+  }
 
-  static Attribute _attributeFromString(String attribute) =>
-      Attribute.values.firstWhere((e) => e.toString() == attribute);
+  static Attribute _attributeFromString(String attribute) {
+    try {
+      return Attribute.values.firstWhere((e) => e.toString() == attribute);
+    } catch (e) {
+      throw FormatException('Invalid attribute: $attribute');
+    }
+  }
 
-  static Tag _tagFromString(String tag) =>
-      Tag.values.firstWhere((e) => e.toString() == tag);
+  static Tag _tagFromString(String tag) {
+    try {
+      return Tag.values.firstWhere((e) => e.toString() == tag);
+    } catch (e) {
+      throw FormatException('Invalid tag: $tag');
+    }
+  }
 }

@@ -1,4 +1,4 @@
-// enums for multiple purposes
+// Enums for the CardModel properties
 
 enum Attribute {
   light,

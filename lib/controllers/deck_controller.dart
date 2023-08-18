@@ -1,16 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/card_model.dart';
 import '../models/deck_model.dart';
 import '../services/deck_services.dart';
 
 class CustomDeckController {
-  final CustomDeckService _deckService = CustomDeckService();
 
-  Future<void> addDeck(DeckModel deck) async {
-    await _deckService.addDeck(deck);
+  CustomDeckController(this._deckService);
+
+  final CustomDeckService _deckService;
+
+  Query<DeckModel> get decksQuery => _deckService.decksQuery;
+
+  Future<List<DeckModel>> getAllDecks() async {
+    return await _deckService.getAllDecks();
   }
 
   Future<DeckModel?> getDeck(String deckId) async {
     return await _deckService.getDeck(deckId);
+  }
+
+  Future<void> addDeck(DeckModel deck) async {
+    await _deckService.addDeck(deck);
   }
 
   Future<void> editDeck(String deckId, DeckModel updatedDeck) async {
@@ -21,6 +31,14 @@ class CustomDeckController {
     await _deckService.deleteDeck(deckId);
   }
 
+  Future<List<CardModel>> getCardListInDeck(String? deckId) async {
+    return await _deckService.getCardListInDeck(deckId);
+  }
+
+  Future<CardModel?> getCardInDeck(String deckId, String cardId) async {
+    return await _deckService.getSingleCardInDeck(deckId, cardId);
+  }
+
   Future<void> addListOfCardsToDeck(
       String deckId, List<CardModel> cards) async {
     await _deckService.addListOfCardsToDeck(deckId, cards);
@@ -28,14 +46,6 @@ class CustomDeckController {
 
   Future<void> addCardToDeck(String deckId, CardModel card) async {
     await _deckService.addCardToDeck(deckId, card);
-  }
-
-  Future<List<CardModel>> getCardListInDeck(String? deckId) async {
-    return await _deckService.getCardListInDeck(deckId);
-  }
-
-  Future<CardModel?> getCardInDeck(String deckId, String cardId) async {
-    return await _deckService.getSingleCardInDeck(deckId, cardId);
   }
 
   Future<void> editCardInDeck(String deckId, CardModel updatedCard) async {
