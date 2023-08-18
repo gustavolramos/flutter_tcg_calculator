@@ -4,7 +4,7 @@ Project Objective:
 - Utilize "riverpod" for state management
 - Apply unit tests to the project
 - Save data to Firebase's Cloud Firestore
-- Try to use some architectural pattern, maybe MVVM
+- Utilize MVC as the archicteture of choice
 
 Project Description:
 
@@ -22,5 +22,3 @@ There will be multiple methods associated with the deck like:
 With these methods it will be possible to create a deck analytics in the future
 
 The cards and decks will be stored within Firebase's Cloud Firestore.
-
-OG Name: my_bloc_ut_flutter_project
