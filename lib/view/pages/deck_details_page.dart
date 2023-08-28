@@ -15,7 +15,7 @@ class DeckDetailsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cardListAsyncValue = ref.watch(cardListInDeckProvider(deckId!));
     return Scaffold(
-      appBar: const CustomAppBar(height: 150),
+      appBar: const CustomAppBar(height: 50),
       body: Material(
         child: cardListAsyncValue.when(
           loading: () => const CustomLoadingPage(),
