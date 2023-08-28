@@ -4,7 +4,6 @@ import '../models/deck_model.dart';
 import '../services/deck_services.dart';
 
 class CustomDeckController {
-
   CustomDeckController(this._deckService);
 
   final CustomDeckService _deckService;
@@ -56,30 +55,23 @@ class CustomDeckController {
     await _deckService.deleteCardFromDeck(deckId, cardId);
   }
 
-  double choose(int n, int k) {
-    if (k == 0 || k == n) {
-      return 1;
-    }
-    double result = 1;
-    for (int i = 1; i <= k; i++) {
-      result = result * (n - k + i) / i;
-    }
-    return result;
+double calculateBinomialCoefficient(int totalItems, int selectedItems) {
+  if (selectedItems == 0 || selectedItems == totalItems) {
+    return 1;
   }
+  double result = 1;
+  for (int i = 1; i <= selectedItems; i++) {
+    result = result * (totalItems - selectedItems + i) / i;
+  }
+  return result;
+}
 
-  double hypergeometricProbability(
-    int numOfGivenCard,
+  double calculateHypergeometricProbability(
     int totalCardsInDeck,
+    int numOfGivenCard,
     int numberOfCardsInOpeningHand,
-    int numToCheck,
   ) {
-    double numerator = 0;
-    for (int i = numToCheck; i <= numberOfCardsInOpeningHand; i++) {
-      numerator += choose(numOfGivenCard, i) *
-          choose(totalCardsInDeck - numOfGivenCard,
-              numberOfCardsInOpeningHand - i);
-    }
-    double denominator = choose(totalCardsInDeck, numberOfCardsInOpeningHand);
-    return (numerator / denominator) * 100;
+    double probabilityNoCopies = calculateBinomialCoefficient(totalCardsInDeck - numOfGivenCard, numberOfCardsInOpeningHand) / calculateBinomialCoefficient(totalCardsInDeck, numberOfCardsInOpeningHand);
+    return (1 - probabilityNoCopies) * 100;
   }
 }

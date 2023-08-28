@@ -4,6 +4,7 @@ import '../models/card_model.dart';
 import '../models/deck_model.dart';
 
 class CustomDeckService {
+  
   final Query<DeckModel> decksQuery = FirebaseFirestore.instance
       .collection('decks')
       .orderBy('name')

@@ -8,7 +8,7 @@ class CustomErrorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(height: 150),
+      appBar: const CustomAppBar(height: 50),
       body: Center(
         child: ElevatedButton(
           onPressed: () => context.go('/'), 

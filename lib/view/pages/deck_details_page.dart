@@ -14,7 +14,6 @@ class DeckDetailsPage extends ConsumerWidget {
 @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cardListAsyncValue = ref.watch(cardListInDeckProvider(deckId!));
-
     return Scaffold(
       appBar: const CustomAppBar(height: 150),
       body: Material(
