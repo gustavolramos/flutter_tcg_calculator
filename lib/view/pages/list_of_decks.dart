@@ -4,12 +4,16 @@ import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter_tcg_calculator/view/pages/loading_page.dart';
 import 'package:flutter_tcg_calculator/view/widgets/app_bar.dart';
 import 'package:flutter_tcg_calculator/view/widgets/deck_list_tile.dart';
+import '../../controllers/deck_controller.dart';
 import '../../models/deck_model.dart';
+import '../widgets/floating_action_button.dart';
 
 class CustomListView extends StatelessWidget {
-  const CustomListView({required this.decksQuery, super.key});
+  const CustomListView(
+      {required this.decksQuery, required this.deckController, super.key});
 
   final Query<DeckModel> decksQuery;
+  final CustomDeckController deckController;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +33,7 @@ class CustomListView extends StatelessWidget {
               deckId: deck.id,
             ));
           }),
+      floatingActionButton: AddDeckFloatingActionButton(deckController: deckController),
     );
   }
 }

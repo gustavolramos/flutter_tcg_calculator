@@ -18,7 +18,7 @@ final routeProvider = Provider<GoRouter>((ref) => GoRouter(
           path: '/decklist',
           pageBuilder: (context, state) {
             final customDeckController = ref.read(deckControllerProvider);
-            return MaterialPage(child: CustomListView(decksQuery: customDeckController.decksQuery,));
+            return MaterialPage(child: CustomListView(decksQuery: customDeckController.decksQuery, deckController: customDeckController));
           },
           routes: [
             GoRoute(
