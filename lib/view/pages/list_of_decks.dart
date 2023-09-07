@@ -9,8 +9,7 @@ import '../../models/deck_model.dart';
 import '../widgets/floating_action_button.dart';
 
 class CustomListView extends StatelessWidget {
-  const CustomListView(
-      {required this.decksQuery, required this.deckController, super.key});
+  const CustomListView({required this.decksQuery, required this.deckController, super.key});
 
   final Query<DeckModel> decksQuery;
   final CustomDeckController deckController;

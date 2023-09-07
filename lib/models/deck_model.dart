@@ -16,8 +16,6 @@ class DeckModel {
   }
 
   factory DeckModel.fromJson(Map<String, dynamic> json) {
-    return DeckModel(
-        name: json['name'] as String,
-        cardList: (json['cardList'] as List<dynamic>).cast<Map<String, dynamic>>());
+    return DeckModel(name: json['name'] as String, cardList: (json['cardList'] as List<dynamic>).cast<Map<String, dynamic>>());
   }
 }

@@ -8,22 +8,22 @@ class CustomDeckController {
 
   final CustomDeckService _deckService;
 
-  Query<DeckModel> get decksQuery => _deckService.decksQuery;
+  Query<DeckModel> get decksQuery => _deckService.listOfDecksQuery;
 
   Future<List<DeckModel>> getAllDecks() async {
     return await _deckService.getAllDecks();
   }
 
   Future<DeckModel?> getDeck(String deckId) async {
-    return await _deckService.getDeck(deckId);
+    return await _deckService.getSingleDeck(deckId);
   }
 
   Future<void> addDeck(DeckModel deck) async {
     await _deckService.addDeck(deck);
   }
 
-  Future<void> editDeck(String deckId, DeckModel updatedDeck) async {
-    await _deckService.editDeck(deckId, updatedDeck);
+  Future<void> editDeck(String deckId, {String? newName, DeckModel? updatedDeck}) async {
+    await _deckService.editDeck(deckId, newName: newName, updatedDeck: updatedDeck);
   }
 
   Future<void> deleteDeck(String deckId) async {
@@ -38,8 +38,7 @@ class CustomDeckController {
     return await _deckService.getSingleCardInDeck(deckId, cardId);
   }
 
-  Future<void> addListOfCardsToDeck(
-      String deckId, List<CardModel> cards) async {
+  Future<void> addListOfCardsToDeck(String deckId, List<CardModel> cards) async {
     await _deckService.addListOfCardsToDeck(deckId, cards);
   }
 
@@ -55,23 +54,24 @@ class CustomDeckController {
     await _deckService.deleteCardFromDeck(deckId, cardId);
   }
 
-double calculateBinomialCoefficient(int totalItems, int selectedItems) {
-  if (selectedItems == 0 || selectedItems == totalItems) {
-    return 1;
+  double calculateBinomialCoefficient(int totalItems, int selectedItems) {
+    if (selectedItems == 0 || selectedItems == totalItems) {
+      return 1;
+    }
+    double result = 1;
+    for (int i = 1; i <= selectedItems; i++) {
+      result = result * (totalItems - selectedItems + i) / i;
+    }
+    return result;
   }
-  double result = 1;
-  for (int i = 1; i <= selectedItems; i++) {
-    result = result * (totalItems - selectedItems + i) / i;
-  }
-  return result;
-}
 
   double calculateHypergeometricProbability(
     int totalCardsInDeck,
     int numOfGivenCard,
     int numberOfCardsInOpeningHand,
   ) {
-    double probabilityNoCopies = calculateBinomialCoefficient(totalCardsInDeck - numOfGivenCard, numberOfCardsInOpeningHand) / calculateBinomialCoefficient(totalCardsInDeck, numberOfCardsInOpeningHand);
+    double probabilityNoCopies = calculateBinomialCoefficient(totalCardsInDeck - numOfGivenCard, numberOfCardsInOpeningHand) /
+        calculateBinomialCoefficient(totalCardsInDeck, numberOfCardsInOpeningHand);
     return (1 - probabilityNoCopies) * 100;
   }
 }

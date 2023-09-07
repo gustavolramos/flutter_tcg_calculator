@@ -7,9 +7,7 @@ import 'package:flutter_tcg_calculator/view/pages/list_of_decks.dart';
 import 'package:go_router/go_router.dart';
 import 'deck_providers.dart';
 
-final routeProvider = Provider<GoRouter>((ref) => GoRouter(
-  errorBuilder: (context, state) => const CustomErrorPage(),
-  routes: <RouteBase>[
+final routeProvider = Provider<GoRouter>((ref) => GoRouter(errorBuilder: (context, state) => const CustomErrorPage(), routes: <RouteBase>[
       GoRoute(
         path: '/',
         pageBuilder: (context, state) => const MaterialPage(child: HomePage()),

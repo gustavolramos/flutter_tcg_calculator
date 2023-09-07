@@ -10,8 +10,8 @@ class DeckDetailsPage extends ConsumerWidget {
   const DeckDetailsPage({super.key, required this.deckId});
 
   final String? deckId;
-  
-@override
+
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cardListAsyncValue = ref.watch(cardListInDeckProvider(deckId!));
     return Scaffold(

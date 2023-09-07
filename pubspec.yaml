@@ -7,15 +7,21 @@ environment:
   sdk: '>=3.0.5 <4.0.0'
 
 dependencies:
-  cloud_firestore: ^4.8.4
-  dev: ^1.0.0
-  firebase_core: ^2.15.0
-  firebase_ui_firestore: ^1.5.6
+#General
   flutter:
     sdk: flutter
+  dev: ^1.0.0
+#Firebase
+  cloud_firestore: ^4.8.4
+  firebase_core: ^2.15.0
+  firebase_ui_firestore: ^1.5.6
+#Riverpod 
   flutter_riverpod: ^2.3.6
-  go_router: ^10.0.0
   riverpod_annotation: ^2.1.1
+#Routing  
+  go_router: ^10.0.0
+#Testing  
+  fake_cloud_firestore: ^2.4.1+1
 
 dev_dependencies:
   flutter_test:
