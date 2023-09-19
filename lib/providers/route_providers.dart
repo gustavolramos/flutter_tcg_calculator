@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tcg_calculator/controllers/deck_controller.dart';
 import 'package:flutter_tcg_calculator/view/pages/deck_details_page.dart';
 import 'package:flutter_tcg_calculator/view/pages/error_page.dart';
 import 'package:flutter_tcg_calculator/view/pages/home_page.dart';
@@ -15,8 +16,12 @@ final routeProvider = Provider<GoRouter>((ref) => GoRouter(errorBuilder: (contex
       GoRoute(
           path: '/decklist',
           pageBuilder: (context, state) {
-            final customDeckController = ref.read(deckControllerProvider);
-            return MaterialPage(child: CustomListView(decksQuery: customDeckController.decksQuery, deckController: customDeckController));
+            final CustomDeckController customDeckController = ref.read(deckControllerProvider);
+            return MaterialPage(
+                child: ListOfDecks(
+              decksQuery: customDeckController.listOfDecksQuery,
+              deckController: customDeckController,
+            ));
           },
           routes: [
             GoRoute(

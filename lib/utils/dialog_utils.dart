@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DialogUtils {
+
   static Future<void> showEditDialog(BuildContext context, Function(String) onEdit) async {
     String newName = '';
     await showDialog(
@@ -49,7 +50,7 @@ class DialogUtils {
             TextButton(
               child: const Text('Delete'),
               onPressed: () {
-                onDelete();
+                onDelete(); 
                 Navigator.of(context).pop();
               },
             ),

@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -8,8 +9,9 @@ import '../../controllers/deck_controller.dart';
 import '../../models/deck_model.dart';
 import '../widgets/floating_action_button.dart';
 
-class CustomListView extends StatelessWidget {
-  const CustomListView({required this.decksQuery, required this.deckController, super.key});
+class ListOfDecks extends StatelessWidget {
+  const ListOfDecks
+({required this.decksQuery, required this.deckController, super.key});
 
   final Query<DeckModel> decksQuery;
   final CustomDeckController deckController;
@@ -25,7 +27,8 @@ class CustomListView extends StatelessWidget {
           errorBuilder: (context, error, stackTrace) => Text(error.toString()),
           loadingBuilder: (context) => const CustomLoadingPage(),
           itemBuilder: (context, snapshot) {
-            DeckModel deck = snapshot.data();
+            DeckModel deck = snapshot.data(); // Need to find a way to assure this deck is instantiated with the ID
+            print('Deck ID: ${deck.id} and ${deck.name}'); // Trying to understand where I'm missing the ID
             return Material(
                 child: DeckListTile(
               name: deck.name,

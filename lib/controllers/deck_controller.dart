@@ -8,7 +8,7 @@ class CustomDeckController {
 
   final CustomDeckService _deckService;
 
-  Query<DeckModel> get decksQuery => _deckService.listOfDecksQuery;
+  Query<DeckModel> get listOfDecksQuery => _deckService.listOfDecksQuery;
 
   Future<List<DeckModel>> getAllDecks() async {
     return await _deckService.getAllDecks();

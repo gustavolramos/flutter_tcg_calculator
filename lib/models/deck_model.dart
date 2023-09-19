@@ -1,7 +1,8 @@
 class DeckModel {
   DeckModel({
     required this.name,
-    required this.cardList,
+    required this.cardList, 
+    this.id,
   });
 
   String? id;
@@ -16,6 +17,9 @@ class DeckModel {
   }
 
   factory DeckModel.fromJson(Map<String, dynamic> json) {
-    return DeckModel(name: json['name'] as String, cardList: (json['cardList'] as List<dynamic>).cast<Map<String, dynamic>>());
+    return DeckModel(
+        id: json['id'],
+        name: json['name'] as String,
+        cardList: (json['cardList'] as List<dynamic>).cast<Map<String, dynamic>>());
   }
 }

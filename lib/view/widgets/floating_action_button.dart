@@ -50,6 +50,7 @@ class AddDeckFloatingActionButton extends StatelessWidget {
       final newDeck = DeckModel(
         name: deckName,
         cardList: [],
+        id: null,
       );
       await deckController.addDeck(newDeck);
     }

@@ -4,26 +4,33 @@ import '../models/card_model.dart';
 import '../models/deck_model.dart';
 
 class CustomDeckService {
+  
   final Query<DeckModel> listOfDecksQuery = FirebaseFirestore.instance.collection('decks').orderBy('name').withConverter(
         fromFirestore: (snapshot, _) => DeckModel.fromJson(snapshot.data()!),
         toFirestore: (deck, _) => deck.toJson(),
       );
 
   Future<List<DeckModel>> getAllDecks() async {
-    try {
-      final querySnapshot = await listOfDecksQuery.get();
-      return querySnapshot.docs.map((doc) => doc.data()).toList();
-    } catch (e) {
-      print('Error getting all decks: $e');
-      return [];
-    }
+  try {
+    final querySnapshot = await listOfDecksQuery.get();
+    return querySnapshot.docs.map((doc) {
+      final deck = DeckModel.fromJson(doc.data() as Map<String, dynamic>);
+      deck.id = doc.id; // Set the 'id' field
+      return deck;
+    }).toList();
+  } catch (e) {
+    print('Error getting all decks: $e');
+    return [];
   }
+}
 
   Future<DeckModel?> getSingleDeck(String deckId) async {
     try {
-      var doc = await FirebaseFirestore.instance.collection('decks').doc(deckId).get();
-      if (doc.exists) {
-        return DeckModel.fromJson(doc as Map<String, dynamic>);
+      final docSnapshot = await FirebaseFirestore.instance.collection('decks').doc(deckId).get();
+      if (docSnapshot.exists) {
+        final deckData = docSnapshot.data() as Map<String, dynamic>;
+        deckData['id'] = docSnapshot.id;
+        return DeckModel.fromJson(deckData);
       } else {
         print('Deck not found!');
         return null;
